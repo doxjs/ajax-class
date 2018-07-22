@@ -1,8 +1,10 @@
+import { type } from "os";
+
 const is = Object.is || ((a, b) => a === b);
 const types = {
     form: 'application/x-www-form-urlencoded',
     formData: 'multipart/form-data',
-    json: 'text/plain',
+    json: 'application/json',
     text: 'text/plain',
     xml: 'text/xml'
 }
@@ -171,7 +173,8 @@ class Ajax {
 
         this.headers = {
             ...this.headers,
-            ['Accept']: this.accept
+            ['Accept']: this.accept,
+            ['Content-Type']: types[this.requestType],
         }
 
         for (let i in this.headers) {
