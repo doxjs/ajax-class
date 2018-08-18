@@ -12,7 +12,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var types = {
     form: 'application/x-www-form-urlencoded',
     formData: 'multipart/form-data',
-    json: 'text/plain',
+    json: 'application/json',
     text: 'text/plain',
     xml: 'text/xml'
 };
@@ -61,11 +61,13 @@ var Ajax = function () {
     }, {
         key: '_open',
         value: function _open() {
-            var _this = this;
+            var _extends2,
+                _this = this;
 
-            this.xhr.open(this.method, this.url + '?' + this.query, this.async);
+            var usl = !!this.query ? this.url + '?' + this.query : this.url;
+            this.xhr.open(this.method, url, this.async);
 
-            this.headers = _extends({}, this.headers, _defineProperty({}, 'Accept', this.accept));
+            this.headers = _extends({}, this.headers, (_extends2 = {}, _defineProperty(_extends2, 'Accept', this.accept), _defineProperty(_extends2, 'Content-Type', types[this.requestType]), _extends2));
 
             for (var i in this.headers) {
                 this.xhr.setRequestHeader(i, this.headers[i]);
@@ -115,6 +117,7 @@ var Ajax = function () {
             }
 
             this.xhr.send(this.body);
+            this.bodyUsed = true;
         }
     }, {
         key: 'fetch',
@@ -126,11 +129,9 @@ var Ajax = function () {
                 _this2.on('load', function () {
                     resolve(_this2.response);
                 });
+                _this2.on('error', reject);
+                _this2._send();
             });
-
-            this.on('error', reject);
-            this._send();
-
             return promise;
         }
     }, {
@@ -145,6 +146,14 @@ var Ajax = function () {
         },
         get: function get() {
             return this._body || '';
+        }
+    }, {
+        key: 'bodyUsed',
+        set: function set(bu) {
+            this._bodyUsed = bu;
+        },
+        get: function get() {
+            return this._bodyUsed || false;
         }
     }, {
         key: 'method',
@@ -244,6 +253,9 @@ var Ajax = function () {
             this._query = q;
         },
         get: function get() {
+            if (this.queryUsed) {
+                return '';
+            }
             if (typeof this._query === 'string') {
                 return this._query;
             }
@@ -252,7 +264,16 @@ var Ajax = function () {
             for (var i in query) {
                 result += '&' + i + '=' + query[i];
             }
+            this.queryUsed = true;
             return result.replace(/^&+/, '');
+        }
+    }, {
+        key: 'queryUsed',
+        get: function get() {
+            return this._queryUsed || false;
+        },
+        set: function set(qu) {
+            this._queryUsed = qu;
         }
     }, {
         key: 'response',

@@ -24,6 +24,8 @@ export default class Ajax {
     timeout: number;
     accept: string;
     query: string;
+    queryUsed: boolean;
+    bodyUsed: boolean;
     options: (ops: object) => void;
     getResponseHeadaer: (key: string) => string;
     on: (ev: string, fn: (event: Event) => void) => void;

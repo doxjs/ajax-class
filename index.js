@@ -1,5 +1,3 @@
-import { type } from "os";
-
 const is = Object.is || ((a, b) => a === b);
 const types = {
     form: 'application/x-www-form-urlencoded',
@@ -28,6 +26,14 @@ class Ajax {
 
     get body() {
         return this._body || '';
+    }
+
+    set bodyUsed(bu) {
+        this._bodyUsed = bu;
+    }
+
+    get bodyUsed() {
+        return this._bodyUsed || false;
     }
 
     set method(m) {
@@ -123,6 +129,9 @@ class Ajax {
     }
 
     get query() {
+        if (this.queryUsed) {
+            return '';
+        }
         if (typeof this._query === 'string') {
             return this._query;
         }
@@ -130,7 +139,16 @@ class Ajax {
         for (let i in query) {
             result += `&${i}=${query[i]}`;
         }
+        this.queryUsed = true;
         return result.replace(/^&+/, '');
+    }
+
+    get queryUsed() {
+        return this._queryUsed || false;
+    }
+
+    set queryUsed(qu) {
+        this._queryUsed = qu;
     }
 
     get response() {
@@ -169,7 +187,8 @@ class Ajax {
     }
 
     _open() {
-        this.xhr.open(this.method, this.url + '?' + this.query, this.async);
+        const usl = !!this.query ? this.url + '?' + this.query : this.url;
+        this.xhr.open(this.method, url, this.async);
 
         this.headers = {
             ...this.headers,
@@ -218,6 +237,7 @@ class Ajax {
         }
 
         this.xhr.send(this.body);
+        this.bodyUsed = true;
     }
 
     fetch() {
@@ -226,11 +246,9 @@ class Ajax {
             this.on('load', () => {
                 resolve(this.response);
             });
+            this.on('error', reject);
+            this._send();
         });
-
-        this.on('error', reject);
-        this._send();
-
         return promise;
     }
 }
