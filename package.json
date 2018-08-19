@@ -1,6 +1,6 @@
 {
   "name": "ajax-class",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "encapsulation for Ajax using Class grammer in ECMAScript 6",
   "main": "./dist/index.js",
   "repository": "https://github.com/doxjs/es6-ajax",
