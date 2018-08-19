@@ -64,7 +64,7 @@ var Ajax = function () {
             var _extends2,
                 _this = this;
 
-            var usl = !!this.query ? this.url + '?' + this.query : this.url;
+            var url = !!this.query ? this.url + '?' + this.query : this.url;
             this.xhr.open(this.method, url, this.async);
 
             this.headers = _extends({}, this.headers, (_extends2 = {}, _defineProperty(_extends2, 'Accept', this.accept), _defineProperty(_extends2, 'Content-Type', types[this.requestType]), _extends2));
