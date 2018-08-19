@@ -187,7 +187,7 @@ class Ajax {
     }
 
     _open() {
-        const usl = !!this.query ? this.url + '?' + this.query : this.url;
+        const url = !!this.query ? this.url + '?' + this.query : this.url;
         this.xhr.open(this.method, url, this.async);
 
         this.headers = {
