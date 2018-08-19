@@ -241,15 +241,14 @@ class Ajax {
     }
 
     fetch() {
-        this._open();
-        const promise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
+            this._open();
             this.on('load', () => {
                 resolve(this.response);
             });
             this.on('error', reject);
             this._send();
         });
-        return promise;
     }
 }
 

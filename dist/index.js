@@ -124,15 +124,14 @@ var Ajax = function () {
         value: function fetch() {
             var _this2 = this;
 
-            this._open();
-            var promise = new Promise(function (resolve, reject) {
+            return new Promise(function (resolve, reject) {
+                _this2._open();
                 _this2.on('load', function () {
                     resolve(_this2.response);
                 });
                 _this2.on('error', reject);
                 _this2._send();
             });
-            return promise;
         }
     }, {
         key: 'xhr',
