@@ -1,11 +1,4 @@
 const is = Object.is || ((a, b) => a === b);
-const types = {
-    form: 'application/x-www-form-urlencoded',
-    formData: 'multipart/form-data',
-    json: 'application/json',
-    text: 'text/plain',
-    xml: 'text/xml'
-}
 const has = (obj, k) => Object.hasOwnProperty.call(obj, k);
 
 class Ajax {
@@ -60,14 +53,6 @@ class Ajax {
         return this._responseType || 'json';
     }
 
-    set requestType(rt) {
-        this._requestType = rt;
-    }
-
-    get requestType() {
-        return has(types, this._requestType) ? this._requestType : 'json';
-    }
-
     set charset(c) {
         this._charset = c;
     }
@@ -114,14 +99,6 @@ class Ajax {
 
     get timeout() {
         return this._timeout || 0;
-    }
-
-    set accept(a) {
-        this._accept = a;
-    }
-
-    get accept() {
-        return this._accept || '*/*'
     }
 
     set query(q) {
@@ -189,12 +166,9 @@ class Ajax {
     _open() {
         const url = !!this.query ? this.url + '?' + this.query : this.url;
         this.xhr.open(this.method, url, this.async);
+    }
 
-        this.headers = {
-            ...this.headers,
-            ['Accept']: this.accept,
-            ['Content-Type']: types[this.requestType],
-        }
+    _send() {
 
         for (let i in this.headers) {
             this.xhr.setRequestHeader(i, this.headers[i]);
@@ -207,9 +181,7 @@ class Ajax {
         }
         this.xhr.timeout = this.timeout;
         this.xhr.responseType = this.responseType;
-    }
 
-    _send() {
         switch (this.requestType) {
             case 'text':
                 this.body = `${this.body}`;

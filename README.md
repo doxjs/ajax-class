@@ -20,7 +20,6 @@
     method: string;
     url: string;
     responseType: string;
-    requestType: string;
     charset: string;
     async: boolean;
     headers: {
@@ -31,7 +30,6 @@
         [key: string]: (event: Event) => void;
     };
     timeout: number;
-    accept: string;
     query: string;
     queryUsed: boolean;
     bodyUsed: boolean;
@@ -39,7 +37,7 @@
     getResponseHeadaer: (key: string) => string;
     on: (ev: string, fn: (event: Event) => void) => void;
     abort: () => void;
-    fetch: () => Promise;
+    fetch: () => Promise<any>;
 ```
 
 ## methods

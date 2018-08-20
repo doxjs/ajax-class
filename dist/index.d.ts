@@ -30,5 +30,5 @@ export default class Ajax {
     getResponseHeadaer: (key: string) => string;
     on: (ev: string, fn: (event: Event) => void) => void;
     abort: () => void;
-    fetch: () => Promise;
+    fetch: () => Promise<any>;
 }

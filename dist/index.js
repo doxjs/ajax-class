@@ -2,20 +2,9 @@
 ** Created by Double Dimos        
 */
         
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-var types = {
-    form: 'application/x-www-form-urlencoded',
-    formData: 'multipart/form-data',
-    json: 'application/json',
-    text: 'text/plain',
-    xml: 'text/xml'
-};
 var has = function has(obj, k) {
     return Object.hasOwnProperty.call(obj, k);
 };
@@ -61,13 +50,13 @@ var Ajax = function () {
     }, {
         key: '_open',
         value: function _open() {
-            var _extends2,
-                _this = this;
-
             var url = !!this.query ? this.url + '?' + this.query : this.url;
             this.xhr.open(this.method, url, this.async);
-
-            this.headers = _extends({}, this.headers, (_extends2 = {}, _defineProperty(_extends2, 'Accept', this.accept), _defineProperty(_extends2, 'Content-Type', types[this.requestType]), _extends2));
+        }
+    }, {
+        key: '_send',
+        value: function _send() {
+            var _this = this;
 
             for (var i in this.headers) {
                 this.xhr.setRequestHeader(i, this.headers[i]);
@@ -86,10 +75,7 @@ var Ajax = function () {
             }
             this.xhr.timeout = this.timeout;
             this.xhr.responseType = this.responseType;
-        }
-    }, {
-        key: '_send',
-        value: function _send() {
+
             switch (this.requestType) {
                 case 'text':
                     this.body = '' + this.body;
@@ -102,15 +88,15 @@ var Ajax = function () {
                     break;
                 case 'formData':
                     var form = new FormData();
-                    for (var i in this.body) {
-                        form.set(i, this.body[i]);
+                    for (var _i2 in this.body) {
+                        form.set(_i2, this.body[_i2]);
                     }
                     this.body = form;
                     break;
                 case 'form':
                     var result = '';
-                    for (var _i2 in this.body) {
-                        result += '&' + _i2 + '=' + this.body[_i2];
+                    for (var _i3 in this.body) {
+                        result += '&' + _i3 + '=' + this.body[_i3];
                     }
                     this.body = result.replace(/^&+/, '');
                     break;
@@ -179,14 +165,6 @@ var Ajax = function () {
             return this._responseType || 'json';
         }
     }, {
-        key: 'requestType',
-        set: function set(rt) {
-            this._requestType = rt;
-        },
-        get: function get() {
-            return has(types, this._requestType) ? this._requestType : 'json';
-        }
-    }, {
         key: 'charset',
         set: function set(c) {
             this._charset = c;
@@ -237,14 +215,6 @@ var Ajax = function () {
         },
         get: function get() {
             return this._timeout || 0;
-        }
-    }, {
-        key: 'accept',
-        set: function set(a) {
-            this._accept = a;
-        },
-        get: function get() {
-            return this._accept || '*/*';
         }
     }, {
         key: 'query',
