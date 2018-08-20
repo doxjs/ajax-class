@@ -2,11 +2,16 @@ const is = Object.is || ((a, b) => a === b);
 const has = (obj, k) => Object.hasOwnProperty.call(obj, k);
 
 class Ajax {
+
     constructor(method, url, async) {
         this._xhr = new XMLHttpRequest();
         this.method = method;
         this.url = url;
         this.async = async;
+    }
+
+    set xhr(xhr) {
+        this._xhr = xhr;
     }
 
     get xhr() {
@@ -114,7 +119,7 @@ class Ajax {
         }
         let result = '', query = this._query || {};
         for (let i in query) {
-            result += `&${i}=${query[i]}`;
+            result += `&${encodeURIComponent(i)}=${encodeURIComponent(query[i])}`;
         }
         this.queryUsed = true;
         return result.replace(/^&+/, '');
@@ -164,8 +169,20 @@ class Ajax {
     }
 
     _open() {
-        const url = !!this.query ? this.url + '?' + this.query : this.url;
+        for (let key in Ajax.defaults) {
+            // dont use has(this, key), it cant check prototype
+            if (key in this) {
+                this[key] = {
+                    ...Ajax.defaults[key],
+                    ...this[key]
+                };
+            }
+        }
+        const query = this.query;
+        const url = !!query ? this.url + '?' + query : this.url;
+
         this.xhr.open(this.method, url, this.async);
+    
     }
 
     _send() {
@@ -223,5 +240,7 @@ class Ajax {
         });
     }
 }
+
+Ajax.defaults = {};
 
 export default Ajax;

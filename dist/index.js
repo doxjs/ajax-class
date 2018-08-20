@@ -2,6 +2,8 @@
 ** Created by Double Dimos        
 */
         
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,7 +52,15 @@ var Ajax = function () {
     }, {
         key: '_open',
         value: function _open() {
-            var url = !!this.query ? this.url + '?' + this.query : this.url;
+            for (var key in Ajax.defaults) {
+                // dont use has(this, key), it cant check prototype
+                if (key in this) {
+                    this[key] = _extends({}, Ajax.defaults[key], this[key]);
+                }
+            }
+            var query = this.query;
+            var url = !!query ? this.url + '?' + query : this.url;
+
             this.xhr.open(this.method, url, this.async);
         }
     }, {
@@ -121,6 +131,9 @@ var Ajax = function () {
         }
     }, {
         key: 'xhr',
+        set: function set(xhr) {
+            this._xhr = xhr;
+        },
         get: function get() {
             return this._xhr;
         }
@@ -231,7 +244,7 @@ var Ajax = function () {
             var result = '',
                 query = this._query || {};
             for (var i in query) {
-                result += '&' + i + '=' + query[i];
+                result += '&' + encodeURIComponent(i) + '=' + encodeURIComponent(query[i]);
             }
             this.queryUsed = true;
             return result.replace(/^&+/, '');
@@ -266,5 +279,7 @@ var Ajax = function () {
 
     return Ajax;
 }();
+
+Ajax.defaults = {};
 
 export default Ajax;
