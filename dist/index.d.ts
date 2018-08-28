@@ -26,7 +26,9 @@ export default class Ajax {
     };
     timeout: number;
     accept: string;
-    query: string;
+    query: string | {
+        [key: string]: string;
+    };
     queryUsed: boolean;
     bodyUsed: boolean;
     options: (ops: object) => void;

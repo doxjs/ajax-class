@@ -9,6 +9,9 @@
 
 ## properties
 ```ts
+    static defaults: {
+        [key: string]: string | boolean | number;
+    };
     readonly xhr: XMLHttpRequest;
     readonly readyState: string;
     readonly status: number;
