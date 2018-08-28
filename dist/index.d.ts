@@ -1,6 +1,6 @@
 export default class Ajax {
     static defaults: {
-        [key: string]: string | boolean | number;
+        [key: string]: any;
     };
     constructor(method?: string, url?: string, async?: boolean);
     readonly xhr: XMLHttpRequest;
