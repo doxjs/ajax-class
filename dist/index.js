@@ -55,7 +55,11 @@ var Ajax = function () {
             for (var key in Ajax.defaults) {
                 // dont use has(this, key), it cant check prototype
                 if (key in this) {
-                    this[key] = _extends({}, Ajax.defaults[key], this[key]);
+                    if (Object.prototype.toString.call(Ajax.defaults[key]) === '[object Object]') {
+                        this[key] = _extends({}, Ajax.defaults[key], this[key]);
+                    } else {
+                        this[key] = this[key] || Ajax.defaults[key];
+                    }
                 }
             }
             var query = this.query;

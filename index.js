@@ -172,10 +172,14 @@ class Ajax {
         for (let key in Ajax.defaults) {
             // dont use has(this, key), it cant check prototype
             if (key in this) {
-                this[key] = {
-                    ...Ajax.defaults[key],
-                    ...this[key]
-                };
+                if (Object.prototype.toString.call(Ajax.defaults[key]) === '[object Object]') {
+                    this[key] = {
+                        ...Ajax.defaults[key],
+                        ...this[key]
+                    };
+                } else {
+                    this[key] = this[key] || Ajax.defaults[key];
+                }
             }
         }
         const query = this.query;
