@@ -178,7 +178,7 @@ class Ajax {
                         ...this[key]
                     };
                 } else {
-                    this[key] = this[key] || Ajax.defaults[key];
+                    this[key] = Ajax.defaults[key];
                 }
             }
         }

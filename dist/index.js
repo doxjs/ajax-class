@@ -58,7 +58,7 @@ var Ajax = function () {
                     if (Object.prototype.toString.call(Ajax.defaults[key]) === '[object Object]') {
                         this[key] = _extends({}, Ajax.defaults[key], this[key]);
                     } else {
-                        this[key] = this[key] || Ajax.defaults[key];
+                        this[key] = Ajax.defaults[key];
                     }
                 }
             }
